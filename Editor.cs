@@ -48,12 +48,9 @@ namespace TextEditor
         bool dirty = false;
         bool loading = false;
 
-        public Editor(string path = "")
-        {
-            InitializeComponent();
-
+        private void Setup() {
             this.Text = "Text Editor";
-
+        
             fileContentBox.PlaceholderText = "open file: CTRL + O ; save: CTRL + S";
 
             cutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.X;
@@ -62,25 +59,21 @@ namespace TextEditor
 
             openToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.O;
             saveChangesToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.S;
+        }
 
-            OpenFile(path);
+        public Editor(string path = "")
+        {
+            InitializeComponent();
+
+            Setup();
+            OpenFile(path, new List<string>());
         }
 
         public Editor(List<string> contents)
         {
             InitializeComponent();
 
-            this.Text = "Text Editor";
-
-            fileContentBox.PlaceholderText = "open file: CTRL + O ; save: CTRL + S";
-
-            cutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.X;
-            copyToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.C;
-            pasteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.V;
-
-            openToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.O;
-            saveChangesToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.S;
-
+            Setup();
             OpenFile("", contents);
         }
 
