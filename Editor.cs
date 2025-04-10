@@ -54,6 +54,8 @@ namespace TextEditor
 
             this.Text = "Text Editor";
 
+            fileContentBox.PlaceholderText = "open file: CTRL + O ; save: CTRL + S";
+
             cutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.X;
             copyToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.C;
             pasteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.V;
@@ -64,26 +66,50 @@ namespace TextEditor
             OpenFile(path);
         }
 
-        void OpenFile(string path = "")
+        public Editor(List<string> contents)
+        {
+            InitializeComponent();
+
+            this.Text = "Text Editor";
+
+            fileContentBox.PlaceholderText = "open file: CTRL + O ; save: CTRL + S";
+
+            cutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.X;
+            copyToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.C;
+            pasteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.V;
+
+            openToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.O;
+            saveChangesToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.S;
+
+            OpenFile("", contents);
+        }
+
+        void OpenFile(string path = "", List<string> contents)
         {
             loading = true;
             string filename = "";
 
             if (path == "")
             {
-                DialogResult userChoseFile = openFileDialog1.ShowDialog();
+                if (!(contents.Count > 0))
+                {
+                    DialogResult userChoseFile = openFileDialog1.ShowDialog();
 
-                if (!(userChoseFile == DialogResult.OK)) return;
-                filename = openFileDialog1.FileName;
+                    if (!(userChoseFile == DialogResult.OK)) return;
+                    
+                    filename = openFileDialog1.FileName;
+                }
             }
             else
             {
                 filename = path;
             }
 
-            this.Text = "Text Editor - " + Path.GetFileName(filename);
+            this.Text = "Text Editor - " + filename != "" ? Path.GetFileName(filename) : "unsaved buffer";
+
             fileLocationBox.Text = filename;
-            fileContentBox.Text = File.ReadAllText(filename);
+            fileContentBox.Text = filename != "" ? File.ReadAllText(filename) : contents;
+            
             loading = false;
         }
 
